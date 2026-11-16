@@ -97,7 +97,7 @@ class AccessStore:
                                             (actor, account)).fetchone()
                     if membership and membership["active"] and membership["role"] in PERMISSIONS:
                         session, csrf = secrets.token_urlsafe(32), secrets.token_urlsafe(32)
-                        db.execute("INSERT INTO sessions VALUES(?,?,?,?,?,?,?,0)",
+                        db.execute("INSERT INTO sessions(token_hash,actor,institution,business,account,csrf,expires,revoked) VALUES(?,?,?,?,?,?,?,0)",
                                    (digest(session), actor, institution, business, account, csrf, int(self.clock()) + 1800))
                         self.audit(db, "consent.granted", actor, account)
                         result = {"status": "granted", "session": session}

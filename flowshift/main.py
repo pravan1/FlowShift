@@ -11,6 +11,7 @@ from pydantic import BaseModel, ConfigDict
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from flowshift.access import AccessStore, PROFILES
+from flowshift.accounts import AccountData, SyntheticProvider
 
 ROOT = Path(__file__).resolve().parent
 SESSION_COOKIE = "flowshift_demo_session"
@@ -28,12 +29,18 @@ class ConsentInput(BaseModel):
     decision: Literal["grant", "deny"]
 
 
+class SyncInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    scenario: Literal["posted", "pending", "empty", "partial", "timeout", "nonusd"] = "posted"
+
+
 def create_app(store=None):
     if os.environ.get("FLOWSHIFT_MODE", "synthetic") != "synthetic":
         raise RuntimeError("UC-01 supports synthetic mode only; no bank adapter is installed")
     app = FastAPI(title="FlowShift UC-01 — synthetic access demo", docs_url=None, redoc_url=None)
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "[::1]"])
     app.state.access = store or AccessStore(Path("tmp/uc01.sqlite3"))
+    app.state.accounts = AccountData(app.state.access)
 
     @app.middleware("http")
     async def local_boundary(request: Request, call_next):
@@ -90,8 +97,8 @@ def create_app(store=None):
         response.delete_cookie(SESSION_COOKIE)
         response.set_cookie(CONSENT_COOKIE, token, httponly=True, samesite="strict", max_age=300)
         return {"environment": "synthetic", "challenge": token,
-                "requested_access": ["Selected synthetic account context and role"],
-                "notice": "No bank connection, balances, transactions, or money movement."}
+                "requested_access": ["Synthetic account context, balances, and transaction history"],
+                "notice": "Synthetic data only; no bank connection or money movement."}
 
     @app.post("/api/demo/consent")
     def consent(body: ConsentInput, request: Request, response: Response):
@@ -101,6 +108,10 @@ def create_app(store=None):
         result = app.state.access.consent(body.challenge, body.decision == "grant")
         response.delete_cookie(CONSENT_COOKIE)
         if result["status"] == "granted":
+            from flowshift.access import digest
+            with app.state.access.connection() as db:
+                db.execute("UPDATE sessions SET data_consent=1 WHERE token_hash=?", (digest(result["session"]),))
+                app.state.access.audit(db, "account_data.consent_granted")
             response.set_cookie(SESSION_COOKIE, result["session"], httponly=True, samesite="strict", max_age=1800)
         return {"environment": "synthetic", "status": result["status"]}
 
@@ -111,6 +122,20 @@ def create_app(store=None):
     @app.get("/api/accounts/{account_id}/context")
     def account_context(account_id: str, request: Request):
         return app.state.access.authorize(request.cookies.get(SESSION_COOKIE), account=account_id)
+
+    @app.get("/api/accounts")
+    def accounts(context=Depends(access)):
+        return {"environment": "synthetic", "accounts": [{"account_id": context["account_id"],
+                "business_id": context["business_id"], "currency": "USD", "type": "business_checking"}]}
+
+    @app.get("/api/accounts/{account_id}/data")
+    def data(account_id: str, request: Request):
+        return app.state.accounts.read(request.cookies.get(SESSION_COOKIE), account_id)
+
+    @app.post("/api/accounts/{account_id}/sync")
+    def sync(account_id: str, body: SyncInput, request: Request, context=Depends(mutation)):
+        return app.state.accounts.sync(request.cookies.get(SESSION_COOKIE), account_id,
+                                       SyntheticProvider(app.state.access.clock, body.scenario))
 
     @app.post("/api/session/logout")
     def logout(request: Request, response: Response, context=Depends(mutation)):

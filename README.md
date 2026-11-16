@@ -8,9 +8,13 @@ This repository contains the engineering handoff plus a **local synthetic UC-01 
 
 ## Run the UC-01 Demo
 
+UC-02 account data is now available on its implementation branch. See
+[UC-02 setup, demo steps and limitations](docs/UC02_IMPLEMENTATION.md).
+
 See [UC-01 setup, API contract, verification, and integration limitations](docs/UC01_IMPLEMENTATION.md).
 The demo covers explicit synthetic consent, account context, owner/viewer access,
-expiry, logout, and revocation. Other use cases are not implemented.
+expiry, logout, revocation, and UC-02 synthetic balance/history synchronization.
+UC-03 and later business workflows are not implemented.
 
 ```powershell
 python -m venv .venv

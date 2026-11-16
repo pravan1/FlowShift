@@ -21,7 +21,7 @@
   <section id="consent" hidden aria-labelledby="consent-title">
     <h2 id="consent-title">2. Review consent</h2>
     <p id="selection"></p>
-    <p>Allow FlowShift to read this synthetic account's identity and your role. Owner eligibility is not payment authorization. No balances or transactions are requested in this use case.</p>
+    <p>Allow FlowShift to read this synthetic account's identity, your role, balances, and transaction history. No real bank data is requested.</p>
     <button id="grant">Allow synthetic access</button>
     <button id="deny" class="secondary">Deny access</button>
   </section>
@@ -34,6 +34,23 @@
       <button id="logout" class="secondary">Log out</button>
       <button id="revoke" class="secondary">Revoke synthetic consent</button>
     </div>
+  </section>
+  <section id="account-panel" hidden aria-labelledby="account-title">
+    <h2 id="account-title">4. Account data · synthetic</h2>
+    <label for="account">Authorized account</label><select id="account"></select>
+    <label for="scenario">Synthetic import scenario</label>
+    <select id="scenario">
+      <option value="posted">Posted transactions (overlapping pages)</option>
+      <option value="pending">Pending supplier transaction</option>
+      <option value="empty">Empty history</option>
+      <option value="partial">Second page fails</option>
+      <option value="timeout">Provider timeout</option>
+      <option value="nonusd">Unsupported currency</option>
+    </select>
+    <button id="sync">Synchronize synthetic data</button>
+    <p id="sync-status" role="status" aria-live="polite"></p>
+    <dl id="balances"></dl>
+    <ul id="transactions" aria-label="Transaction history"></ul>
   </section>
   <p class="note">Real bank authentication is pending Jack Henry access. Sessions last 30 minutes. This demo runs only on this computer.</p>
 </main>
