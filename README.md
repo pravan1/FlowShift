@@ -4,7 +4,21 @@
 
 FlowShift should tell a business owner what is safe to spend, forecast the next 14 days, protect payroll, and recommend the cheapest safe timing and rail for payments.
 
-This repository intentionally contains **requirements and reference assets only**. It is not a working banking application, a payment integration, or a production-ready system. Engineers should use this handoff to build the project incrementally. No real money may move in the MVP.
+This repository contains the engineering handoff plus a **local synthetic UC-01 access demo**. It is not a working banking application, a payment integration, or a production-ready system. No real money may move in the MVP.
+
+## Run the UC-01 Demo
+
+See [UC-01 setup, API contract, verification, and integration limitations](docs/UC01_IMPLEMENTATION.md).
+The demo covers explicit synthetic consent, account context, owner/viewer access,
+expiry, logout, and revocation. Other use cases are not implemented.
+
+```powershell
+python -m venv .venv
+.venv/Scripts/python.exe -m pip install -r requirements.txt
+.venv/Scripts/python.exe -m uvicorn flowshift.main:create_app --factory --host 127.0.0.1 --port 8000 --no-proxy-headers
+```
+
+Open http://127.0.0.1:8000. Python 3.12 is the tested runtime.
 
 ## Read First
 
@@ -39,7 +53,7 @@ Start with [Milestone 0](docs/ENGINEERING_PLAN.md#milestone-0-contract-and-acces
 
 ## Public Repository Safety
 
-Only the supplied concept images, proposal, and authored documentation belong here. Do not commit customer records, developer-dashboard screenshots containing identifiers, API responses with personal data, tokens, private keys, `.env` files, or proprietary bank documentation. Public visibility is not an open-source license grant; no software or asset license is supplied by this handoff.
+Commit only reviewed application source, tests, authored documentation, and the supplied reference assets. Do not commit local databases, virtual environments, customer records, developer-dashboard screenshots containing identifiers, API responses with personal data, tokens, private keys, `.env` files, or proprietary bank documentation. Public visibility is not an open-source license grant; no software or asset license is supplied by this handoff.
 
 ## Publish To GitHub
 

@@ -1,0 +1,18 @@
+:root { font: 17px/1.55 system-ui, sans-serif; color: #172b3a; background: #f1f5f8; }
+body { margin: 0; }
+main { max-width: 720px; margin: 2rem auto; padding: 1.25rem; }
+h1 { font-size: 2.3rem; margin-bottom: .5rem; }
+h2 { font-size: 1.2rem; margin-top: 0; }
+section { padding: 1.4rem; margin: 1.3rem 0; background: white; border: 1px solid #c8d4df; border-radius: 12px; }
+.badge { display: inline-block; font-size: .78rem; font-weight: 750; letter-spacing: .06em; padding: .4rem .7rem; background: #ffedb1; color: #503c00; border-radius: 5px; }
+label { display: block; font-weight: 600; }
+select { display: block; width: 100%; margin: .5rem 0 1rem; padding: .7rem; font: inherit; }
+button { font: inherit; border: 2px solid #12516c; border-radius: 6px; padding: .65rem .9rem; background: #12516c; color: white; cursor: pointer; margin: .25rem .2rem .25rem 0; }
+button.secondary { color: #12516c; background: white; }
+button:disabled { opacity: .6; cursor: wait; }
+:focus-visible { outline: 3px solid #a75b00; outline-offset: 3px; }
+dt { font-weight: 700; margin-top: .65rem; }
+dd { margin-left: 0; overflow-wrap: anywhere; }
+.note { color: #435b6c; font-size: .9rem; }
+[hidden] { display: none !important; }
+@media (max-width: 420px) { main { margin: .5rem auto; padding: .8rem; } section { padding: 1rem; } button { width: 100%; } }

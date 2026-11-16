@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FlowShift — authorized access demo</title>
+  <link rel="stylesheet" href="/demo.css">
+  <script src="/demo.js" defer></script>
+</head>
+<body>
+<main>
+  <p class="badge">SYNTHETIC DEMO · NO BANK CONNECTION</p>
+  <h1>Enter FlowShift</h1>
+  <p>UC-01: authorize access to a business account context. All identities and accounts below are fictional. No bank credentials or money movement.</p>
+  <section aria-labelledby="identity-title">
+    <h2 id="identity-title">1. Choose a demo identity</h2>
+    <label for="profile">Synthetic identity</label>
+    <select id="profile" disabled><option>Loading identities…</option></select>
+    <button id="start" disabled>Review requested access</button>
+  </section>
+  <section id="consent" hidden aria-labelledby="consent-title">
+    <h2 id="consent-title">2. Review consent</h2>
+    <p id="selection"></p>
+    <p>Allow FlowShift to read this synthetic account's identity and your role. Owner eligibility is not payment authorization. No balances or transactions are requested in this use case.</p>
+    <button id="grant">Allow synthetic access</button>
+    <button id="deny" class="secondary">Deny access</button>
+  </section>
+  <section aria-labelledby="context-title">
+    <h2 id="context-title">3. Authorized context</h2>
+    <p id="status" role="status" aria-live="polite">Checking your session…</p>
+    <dl id="context" hidden></dl>
+    <div id="controls" hidden>
+      <button id="refresh" class="secondary">Check access again</button>
+      <button id="logout" class="secondary">Log out</button>
+      <button id="revoke" class="secondary">Revoke synthetic consent</button>
+    </div>
+  </section>
+  <p class="note">Real bank authentication is pending Jack Henry access. Sessions last 30 minutes. This demo runs only on this computer.</p>
+</main>
+</body>
+</html>
