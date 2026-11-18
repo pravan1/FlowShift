@@ -1,58 +1,16 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FlowShift — authorized access demo</title>
-  <link rel="stylesheet" href="/demo.css">
-  <script src="/demo.js" defer></script>
-</head>
-<body>
-<main>
-  <p class="badge">SYNTHETIC DEMO · NO BANK CONNECTION</p>
-  <h1>Enter FlowShift</h1>
-  <p>UC-01: authorize access to a business account context. All identities and accounts below are fictional. No bank credentials or money movement.</p>
-  <section aria-labelledby="identity-title">
-    <h2 id="identity-title">1. Choose a demo identity</h2>
-    <label for="profile">Synthetic identity</label>
-    <select id="profile" disabled><option>Loading identities…</option></select>
-    <button id="start" disabled>Review requested access</button>
-  </section>
-  <section id="consent" hidden aria-labelledby="consent-title">
-    <h2 id="consent-title">2. Review consent</h2>
-    <p id="selection"></p>
-    <p>Allow FlowShift to read this synthetic account's identity, your role, balances, and transaction history. No real bank data is requested.</p>
-    <button id="grant">Allow synthetic access</button>
-    <button id="deny" class="secondary">Deny access</button>
-  </section>
-  <section aria-labelledby="context-title">
-    <h2 id="context-title">3. Authorized context</h2>
-    <p id="status" role="status" aria-live="polite">Checking your session…</p>
-    <dl id="context" hidden></dl>
-    <div id="controls" hidden>
-      <button id="refresh" class="secondary">Check access again</button>
-      <button id="logout" class="secondary">Log out</button>
-      <button id="revoke" class="secondary">Revoke synthetic consent</button>
-    </div>
-  </section>
-  <section id="account-panel" hidden aria-labelledby="account-title">
-    <h2 id="account-title">4. Account data · synthetic</h2>
-    <label for="account">Authorized account</label><select id="account"></select>
-    <label for="scenario">Synthetic import scenario</label>
-    <select id="scenario">
-      <option value="posted">Posted transactions (overlapping pages)</option>
-      <option value="pending">Pending supplier transaction</option>
-      <option value="empty">Empty history</option>
-      <option value="partial">Second page fails</option>
-      <option value="timeout">Provider timeout</option>
-      <option value="nonusd">Unsupported currency</option>
-    </select>
-    <button id="sync">Synchronize synthetic data</button>
-    <p id="sync-status" role="status" aria-live="polite"></p>
-    <dl id="balances"></dl>
-    <ul id="transactions" aria-label="Transaction history"></ul>
-  </section>
-  <p class="note">Real bank authentication is pending Jack Henry access. Sessions last 30 minutes. This demo runs only on this computer.</p>
-</main>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#081c43"><title>FlowShift · Business banking demo</title><link rel="stylesheet" href="/demo.css"><script src="/demo.js" defer></script></head>
+<body><div class="app-shell">
+<header class="bank-header"><div><span class="bank-symbol" aria-hidden="true">▰</span> FLOW BANK<small>Business banking · demo shell</small></div><span class="avatar">FS</span></header>
+<div class="mode-banner">SYNTHETIC DEMO <span>· No bank connection</span></div>
+<main id="home">
+<div class="account-strip"><div><strong id="business-label">Your business</strong><small id="account-label">Connect a synthetic account to begin</small></div><span class="account-icon" aria-hidden="true">▣</span></div>
+<div class="product-bar"><span class="wordmark">Flow<span>Shift</span></span><span class="beta">DEMO</span><small>Your cash, clearer.</small></div>
+<section class="hero" aria-labelledby="hero-title"><p class="eyebrow">YOUR BUSINESS AT A GLANCE</p><h1 id="hero-title">A clearer view<br>of your cash.</h1><p class="balance-label">Available account balance</p><strong id="hero-balance" class="hero-balance">—</strong><div class="hero-footer"><span id="hero-freshness">Connect to view account data</span><span class="hero-tag">USD</span></div></section>
+<section class="card entry" id="entry" aria-labelledby="identity-title"><div class="section-heading"><span class="icon-tile" aria-hidden="true">◇</span><div><p class="eyebrow">GET STARTED</p><h2 id="identity-title">Connect your account</h2></div></div><p class="muted">Choose a fictional business to explore FlowShift. Your access stays in your control.</p><label for="profile">Synthetic identity</label><select id="profile" disabled><option>Loading identities…</option></select><button id="start" disabled>Review requested access →</button></section>
+<section id="consent" class="card consent-card" hidden aria-labelledby="consent-title"><p class="eyebrow">YOUR PERMISSION</p><h2 id="consent-title">You choose what to share.</h2><p id="selection" class="selected-identity"></p><p>Allow access to this synthetic account's identity, your role, balances, and transaction history. No real bank data is requested.</p><button id="grant">Allow synthetic access</button><button id="deny" class="secondary">Deny access</button></section>
+<section id="account-panel" hidden aria-labelledby="account-title"><div class="section-heading"><span class="icon-tile" aria-hidden="true">▣</span><h2 id="account-title">Your account</h2><span class="section-caption">UC-02</span></div><div class="card"><label for="account">Authorized account</label><select id="account"></select><button id="sync">Synchronize synthetic data</button><p id="sync-status" class="sync-status" role="status" aria-live="polite"></p><details class="demo-options"><summary>Explore demo scenarios</summary><label for="scenario">Synthetic import scenario</label><select id="scenario"><option value="posted">Posted transactions (overlapping pages)</option><option value="pending">Pending supplier transaction</option><option value="empty">Empty history</option><option value="partial">Second page fails</option><option value="timeout">Provider timeout</option><option value="nonusd">Unsupported currency</option></select><p class="muted">Choose a scenario, then synchronize. All amounts are fictional.</p></details></div>
+<div class="section-heading"><span class="icon-tile" aria-hidden="true">≡</span><h2>Balance details</h2></div><dl id="balances" class="card balance-details"></dl><div class="section-heading"><span class="icon-tile" aria-hidden="true">⇄</span><h2>Recent activity</h2><span id="activity-count" class="section-caption"></span></div><ul id="transactions" class="transaction-list" aria-label="Transaction history"></ul></section>
+<section id="access" class="card access-card" aria-labelledby="context-title"><div class="section-heading"><span class="icon-tile" aria-hidden="true">◇</span><h2 id="context-title">Access &amp; privacy</h2></div><p id="status" class="muted" role="status" aria-live="polite">Checking your session…</p><details><summary>Account permissions &amp; session</summary><dl id="context" hidden></dl></details><div id="controls" hidden><button id="refresh" class="secondary">Check access again</button><div class="button-pair"><button id="logout" class="secondary">Log out</button><button id="revoke" class="text-button">Revoke consent</button></div></div></section>
+<p class="note">A local preview of UC-01 &amp; UC-02. Fictional accounts only. No payments or money movement. Bank authentication is pending.</p></main>
+<nav class="bottom-nav" aria-label="Demo navigation"><a href="#home"><span aria-hidden="true">⌂</span>Overview</a><a href="#entry"><span aria-hidden="true">⊕</span>Connect</a><a href="#account-panel"><span aria-hidden="true">▣</span>Account</a><a href="#access"><span aria-hidden="true">☰</span>Access</a></nav></div></body></html>

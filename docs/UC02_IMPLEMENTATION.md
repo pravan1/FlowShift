@@ -1,5 +1,16 @@
 # UC-02: account selection and synchronization
 
+## Mobile presentation
+
+The UC-01/UC-02 interface follows the supplied mobile reference images: navy
+summary card, white rounded activity cards, red primary controls, FlowShift
+wordmark, and a compact bottom navigation. Neutral FLOW BANK branding identifies
+a demo shell; no real bank brand is used. The headline is synchronized available
+balance, not Safe to Spend. Scenario controls and session metadata use expandable
+details. The account navigation returns to Connect until an account is authorized.
+All displayed financial amounts still derive from the UC-02 response. Checked at
+390px and 360px widths without horizontal overflow.
+
 ## Scope
 
 Synthetic implementation only. Real Jack Henry mapping remains pending verified

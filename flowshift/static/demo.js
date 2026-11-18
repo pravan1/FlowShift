@@ -21,6 +21,12 @@ async function api(path, body, csrfToken) {
 }
 
 function clearContext(message) {
+  document.querySelector('.bottom-nav a[href="#account-panel"]')?.setAttribute("href", "#entry");
+  el("hero-balance").textContent = "—";
+  el("hero-freshness").textContent = "Connect to view account data";
+  el("business-label").textContent = "Your business";
+  el("account-label").textContent = "Connect a synthetic account to begin";
+  el("activity-count").textContent = "";
   el("account-panel").hidden = true;
   el("balances").replaceChildren();
   el("transactions").replaceChildren();
@@ -37,6 +43,8 @@ async function loadContext() {
   try {
     const context = await api("/api/session");
     csrf = context.csrf_token;
+    el("business-label").textContent = context.business_id === "demo-bakery" ? "Bakery · demo business" : "Studio · demo business";
+    el("account-label").textContent = `Business checking · ${context.account_id}`;
     const fields = {
       Environment: context.environment.toUpperCase(), Institution: context.institution_id,
       Business: context.business_id, Account: context.account_id,
@@ -85,14 +93,20 @@ for (const decision of ["grant", "deny"]) {
 el("refresh").addEventListener("click", () => busy(loadContext));
 
 function showData(data) {
+  el("sync-status").dataset.state = data.sync_status;
+  el("activity-count").textContent = `${data.events.length} transactions`;
   el("balances").replaceChildren(); el("transactions").replaceChildren();
   el("sync-status").textContent = `${data.sync_status}${data.stale ? " · STALE" : ""}. ${data.error || ""}`;
   if (!data.snapshot) {
+    el("hero-balance").textContent = "—";
+    el("hero-freshness").textContent = "No complete snapshot yet";
     el("sync-status").textContent += " No complete snapshot available. Synchronize to load data.";
     return;
   }
   const money = cents => new Intl.NumberFormat("en-US", {style:"currency",currency:"USD"}).format(cents/100);
   const s = data.snapshot;
+  el("hero-balance").textContent = money(s.available_cents);
+  el("hero-freshness").textContent = `${data.stale ? "STALE · " : "As of "}${new Date(s.as_of*1000).toLocaleString()}`;
   const fields = {"Mode":"SYNTHETIC", "Version":data.version, "Currency":s.currency,
     "Available balance":money(s.available_cents), "Ledger balance":money(s.ledger_cents),
     "Holds (already reflected in available)":money(s.holds_cents),
@@ -108,7 +122,15 @@ function showData(data) {
   }
   for (const event of data.events) {
     const li=document.createElement("li");
-    li.textContent=`${event.description} · ${money(event.amount_cents)} · ${event.status} · ${new Date(event.effective_at*1000).toISOString()}`;
+    const icon=document.createElement("span"); icon.className="event-icon"; icon.textContent=event.amount_cents>=0 ? "↓" : "↑"; icon.setAttribute("aria-hidden","true");
+    const copy=document.createElement("div"); copy.className="event-copy";
+    const title=document.createElement("strong"); title.textContent=event.description;
+    const date=document.createElement("small"); date.textContent=new Date(event.effective_at*1000).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});
+    copy.append(title,date);
+    const value=document.createElement("div"); value.className=`event-value${event.amount_cents>=0 ? " credit" : ""}`;
+    const amount=document.createElement("strong"); amount.textContent=`${event.amount_cents>0 ? "+" : ""}${money(event.amount_cents)}`;
+    const status=document.createElement("small"); status.textContent=event.status;
+    value.append(amount,status); li.append(icon,copy,value);
     el("transactions").append(li);
   }
 }
@@ -120,6 +142,8 @@ async function loadAccounts() {
     el("account").append(option);
   }
   el("account-panel").hidden=false;
+  const accountLink = [...document.querySelectorAll('.bottom-nav a')].find(link => link.textContent.trim().endsWith("Account"));
+  if (accountLink) accountLink.setAttribute("href", "#account-panel");
   if (!result.accounts.length) { el("sync-status").textContent="No authorized accounts."; return; }
   showData(await api(`/api/accounts/${encodeURIComponent(el("account").value)}/data`));
 }
